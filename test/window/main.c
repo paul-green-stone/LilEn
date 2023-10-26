@@ -6,10 +6,12 @@ int main(int argc, char** argv) {
     int running = 1;
     SDL_Event e;
 
-    if (SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO) != 0) {
+    LilEn_init();
 
-        return EXIT_FAILURE;
-    }
+    // if (SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO) != 0) {
+
+    //     return EXIT_FAILURE;
+    // }
 
     if ((window = Window_new("Window", 640, 480, SDL_WINDOW_SHOWN, SDL_RENDERER_ACCELERATED)) == NULL) {
 
@@ -38,7 +40,8 @@ int main(int argc, char** argv) {
     if (window == NULL) {
         printf("OK\n");
     }
-    SDL_Quit();
+
+    LilEn_quit();
 
     return EXIT_SUCCESS;
 }

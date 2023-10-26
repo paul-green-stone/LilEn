@@ -14,6 +14,8 @@
 #include "types.h"
 #include "globals.h"
 
+#include "core/core.h"
+#include "core/cJSON.h"
 #include "Window/window.h"
 
 /* ================================================================ */
