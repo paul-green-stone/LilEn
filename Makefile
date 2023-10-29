@@ -1,11 +1,12 @@
 OBJDIR		:= objects
 OBJS 		:= $(addprefix $(OBJDIR)/, Window.o Core.o)
-COREOBJS	:= $(addprefix $(OBJDIR)/, core.o cJSON.o)
+COREOBJS	:= $(addprefix $(OBJDIR)/, core.o cJSON.o error.o)
 
 INCLUDE		:= source/include.h
 WINDOW		:= $(addprefix source/Window/, window.c window.h)
 CORE		:= $(addprefix source/core/, core.c core.h)
 CJSON		:= $(addprefix source/core/, cJSON.c cJSON.h)
+ERROR		:= $(addprefix source/core/error/, error.c error.h)
 
 LIBRARY 	:= liblilen.a
 
@@ -34,6 +35,9 @@ $(OBJDIR)/Core.o: $(COREOBJS)
 	rm $(COREOBJS)
 
 $(OBJDIR)/core.o: $(CORE) $(INCLUDE)
+	$(CC) $(ALL_CFLAGS) $(CFLAGS) -o $@ $<
+
+$(OBJDIR)/error.o: $(ERROR) $(INCLUDE)
 	$(CC) $(ALL_CFLAGS) $(CFLAGS) -o $@ $<
 
 $(OBJDIR)/cJSON.o: $(CJSON) $(INCLUDE)

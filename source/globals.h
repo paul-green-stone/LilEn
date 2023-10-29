@@ -5,6 +5,9 @@
 
 /* ================================================================ */
 
+/* Recently opened file */
+extern char g_filename[128];
+
 /* A global window available everywhere */
 extern Window_t g_window;
 

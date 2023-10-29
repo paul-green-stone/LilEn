@@ -1,5 +1,7 @@
 #include "../include.h"
 
+char g_filename[128];
+
 /* ================================================================ */
 /* ============================ STATIC ============================ */
 /* ================================================================ */
@@ -72,10 +74,13 @@ char* LilEn_read_data_file(const char* filename) {
     char* buffer = NULL;
     ssize_t file_size;
 
+    if (filename == NULL) {
+        return NULL;
+    }
+
+    strncpy(g_filename, filename, 128 - 1);
+
     if ((input = fopen(filename, "r")) == NULL) {
-
-        /* Implement a propper error handling mechanism */
-
         return buffer;
     }
 
@@ -85,9 +90,7 @@ char* LilEn_read_data_file(const char* filename) {
     rewind(input);
 
     /* Allocate memory for the buffer */
-    if ((buffer = (char*) mallo     c(sizeof(char) * file_size)) == NULL) {
-
-        /* Implement a propper error handling mechanism */
+    if ((buffer = (char*) malloc(sizeof(char) * file_size)) == NULL) {
 
         fclose(input);
 
@@ -126,38 +129,20 @@ extern int LilEn_init(void) {
     {
         /* Read data from a file */
         if ((core_input = LilEn_read_data_file("../../data/core/core.json")) == NULL) {
-
-            /* Implement a propper error handling mechanism */
-
-            return EXIT_FAILURE;
+            goto CLEANUP;
         }
 
         /* Parse the data .json file */
         if ((core_root_json = cJSON_Parse(core_input)) == NULL) {
-
-            /* Implement a propper error handling mechanism */
-
-            free(core_input);
-
-            return EXIT_FAILURE;
+            goto CLEANUP;
         }
 
         if ((c_flags = cJSON_GetObjectItemCaseSensitive(core_root_json, "SDL2")) == NULL) {
-
-            /* Implement a propper error handling mechanism */
-
-            free(core_input);
-
-            return EXIT_FAILURE;
+            goto CLEANUP;
         }
 
         if (!cJSON_IsArray(c_flags)) {
-
-            /* Implement a propper error handling mechanism */
-
-            free(core_input);
-
-            return EXIT_FAILURE;
+            goto CLEANUP;
         }
 
         array_size = (size_t) cJSON_GetArraySize(c_flags);
@@ -181,12 +166,7 @@ extern int LilEn_init(void) {
     /* ================================================================ */
 
     if (SDL_Init(flags) != 0) {
-
-        /* Implement a propper error handling mechanism */
-
-        free(core_input);
-
-        return EXIT_FAILURE;
+        goto CLEANUP;
     }
 
     /* ================================================================ */
@@ -194,40 +174,12 @@ extern int LilEn_init(void) {
     /* ================================================================ */
 
     {
-        /* Read data from a file */
-        if ((core_input = LilEn_read_data_file("../../data/core/core.json")) == NULL) {
-
-            /* Implement a propper error handling mechanism */
-
-            return EXIT_FAILURE;
-        }
-
-        /* Parse the data .json file */
-        if ((core_root_json = cJSON_Parse(core_input)) == NULL) {
-
-            /* Implement a propper error handling mechanism */
-
-            free(core_input);
-
-            return EXIT_FAILURE;
-        }
-
         if ((c_flags = cJSON_GetObjectItemCaseSensitive(core_root_json, "SDL_image")) == NULL) {
-
-            /* Implement a propper error handling mechanism */
-
-            free(core_input);
-
-            return EXIT_FAILURE;
+            goto CLEANUP;
         }
 
         if (!cJSON_IsArray(c_flags)) {
-
-            /* Implement a propper error handling mechanism */
-
-            free(core_input);
-
-            return EXIT_FAILURE;
+            goto CLEANUP;
         }
 
         array_size = (size_t) cJSON_GetArraySize(c_flags);
@@ -252,17 +204,32 @@ extern int LilEn_init(void) {
 
     if (!(IMG_Init(flags) & flags)) {
 
-        /* Implement a propper error handling mechanism */
+        SDL_Quit();
 
-        free(core_input);
-
-        return EXIT_FAILURE;
+        goto CLEANUP;
     }
 
     cJSON_Delete(core_root_json);
     free(core_input);
 
     return EXIT_SUCCESS;
+
+    /* ================================================================ */
+    /* ====================== Handling an error ======================= */
+    /* ================================================================ */
+
+    CLEANUP:
+
+        /* Free memory */
+        if (core_input != NULL) {
+            free(core_input);
+        }
+
+        if (core_root_json != NULL) {
+            cJSON_Delete(core_root_json);
+        }
+
+        return EXIT_FAILURE;
 }
 
 /* ================================================================ */

@@ -17,6 +17,7 @@
 #include "core/core.h"
 #include "core/cJSON.h"
 #include "Window/window.h"
+#include "core/error/error.h"
 
 /* ================================================================ */
 
