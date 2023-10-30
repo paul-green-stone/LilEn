@@ -6,5 +6,6 @@
     "SDL_image": [
         "IMG_INIT_JPG",
         "IMG_INIT_PNG"
-    ]
+    ],
+    "FPS": 60
 }

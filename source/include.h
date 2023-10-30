@@ -14,6 +14,7 @@
 #include "types.h"
 #include "globals.h"
 
+#include "Timer/timer.h"
 #include "core/core.h"
 #include "core/cJSON.h"
 #include "Window/window.h"

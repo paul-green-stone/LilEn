@@ -2,6 +2,8 @@
 
 char g_filename[128];
 
+Timer_t g_timer = NULL;
+
 /* ================================================================ */
 /* ============================ STATIC ============================ */
 /* ================================================================ */
@@ -117,14 +119,21 @@ extern int LilEn_init(void) {
     size_t array_size;
     size_t i = 0;
 
+    /* Data retrieved from a parsed .json file */
+    cJSON* json_data = NULL;
+
+    /* Initialization flags */
+    int flags = 0;
+
+    /* ================================================================ */
+
+    if ((g_timer = Timer_new()) == NULL) {
+        goto CLEANUP;
+    }
+
     /* ================================================================ */
     /* =========== Retrieving SDL flags from the core file ============ */
     /* ================================================================ */
-
-    /* Flags retrieved from a .json file */
-    cJSON* c_flags = NULL;
-    /* Their corresponding integer values */
-    uint32_t flags = 0;
 
     {
         /* Read data from a file */
@@ -137,21 +146,21 @@ extern int LilEn_init(void) {
             goto CLEANUP;
         }
 
-        if ((c_flags = cJSON_GetObjectItemCaseSensitive(core_root_json, "SDL2")) == NULL) {
+        if ((json_data = cJSON_GetObjectItemCaseSensitive(core_root_json, "SDL2")) == NULL) {
             goto CLEANUP;
         }
 
-        if (!cJSON_IsArray(c_flags)) {
+        if (!cJSON_IsArray(json_data)) {
             goto CLEANUP;
         }
 
-        array_size = (size_t) cJSON_GetArraySize(c_flags);
+        array_size = (size_t) cJSON_GetArraySize(json_data);
 
         for (; i < array_size; i++) {
 
             int flag = 0;
 
-            cJSON* item = cJSON_GetArrayItem(c_flags, i);
+            cJSON* item = cJSON_GetArrayItem(json_data, i);
 
             if ((flag = LilEn_lookup_SDL(item->valuestring)) == -1) {
                 continue ;
@@ -173,22 +182,24 @@ extern int LilEn_init(void) {
     /* ======== Retrieving SDL_image flags from the core file ========= */
     /* ================================================================ */
 
+    flags = 0;
+
     {
-        if ((c_flags = cJSON_GetObjectItemCaseSensitive(core_root_json, "SDL_image")) == NULL) {
+        if ((json_data = cJSON_GetObjectItemCaseSensitive(core_root_json, "SDL_image")) == NULL) {
             goto CLEANUP;
         }
 
-        if (!cJSON_IsArray(c_flags)) {
+        if (!cJSON_IsArray(json_data)) {
             goto CLEANUP;
         }
 
-        array_size = (size_t) cJSON_GetArraySize(c_flags);
+        array_size = (size_t) cJSON_GetArraySize(json_data);
 
-        for (; i < array_size; i++) {
+        for (i = 0; i < array_size; i++) {
 
             int flag = 0;
 
-            cJSON* item = cJSON_GetArrayItem(c_flags, i);
+            cJSON* item = cJSON_GetArrayItem(json_data, i);
 
             if ((flag = LilEn_lookup_SDL_image(item->valuestring)) == -1) {
                 continue ;
@@ -203,11 +214,18 @@ extern int LilEn_init(void) {
     /* ================================================================ */
 
     if (!(IMG_Init(flags) & flags)) {
-
-        SDL_Quit();
-
         goto CLEANUP;
     }
+
+    /* ================================================================ */
+
+    if ((json_data = cJSON_GetObjectItemCaseSensitive(core_root_json, "FPS")) == NULL) {
+        Timer_set(g_timer, 1.0f / 60);
+    }
+
+    Timer_set(g_timer, 1.0f / json_data->valueint);
+
+    /* ================================================================ */
 
     cJSON_Delete(core_root_json);
     free(core_input);
@@ -229,6 +247,8 @@ extern int LilEn_init(void) {
             cJSON_Delete(core_root_json);
         }
 
+        LilEn_quit();
+
         return EXIT_FAILURE;
 }
 
@@ -236,8 +256,22 @@ extern int LilEn_init(void) {
 
 void LilEn_quit(void) {
 
+    Timer_destroy(&g_timer);
+    Window_destroy(&g_window);
+
     IMG_Quit();
     SDL_Quit();
+
+    return ;
+}
+
+/* ================================================================ */
+
+void LilEn_log_FPS(void) {
+
+    if (g_timer != NULL) {
+        printf("FPS: %.2f\n", 1.0f / g_timer->acc);
+    }
 
     return ;
 }

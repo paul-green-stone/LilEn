@@ -22,6 +22,8 @@ int main(int argc, char** argv) {
 
     while (running) {
 
+        Timer_tick(g_timer);
+
         while (SDL_PollEvent(&e)) {
 
             switch (e.type) {
@@ -34,7 +36,14 @@ int main(int argc, char** argv) {
             }
         }
 
-        SDL_RenderPresent(g_window->renderer);
+        if (Timer_is_ready(g_timer)) {
+
+            LilEn_log_FPS();
+
+            SDL_RenderPresent(g_window->renderer);
+
+            Timer_reset(g_timer);
+        }
     }
 
     Window_destroy(&window);

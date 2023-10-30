@@ -1,9 +1,10 @@
 OBJDIR		:= objects
-OBJS 		:= $(addprefix $(OBJDIR)/, Window.o Core.o)
+OBJS 		:= $(addprefix $(OBJDIR)/, Window.o Core.o Timer.o)
 COREOBJS	:= $(addprefix $(OBJDIR)/, core.o cJSON.o error.o)
 
 INCLUDE		:= source/include.h
 WINDOW		:= $(addprefix source/Window/, window.c window.h)
+TIMER		:= $(addprefix source/Timer/, timer.c timer.h)
 CORE		:= $(addprefix source/core/, core.c core.h)
 CJSON		:= $(addprefix source/core/, cJSON.c cJSON.h)
 ERROR		:= $(addprefix source/core/error/, error.c error.h)
@@ -28,6 +29,9 @@ $(LIBRARY): $(OBJS)
 	$(AR) $(ARFLAGS) $@ $^
 
 $(OBJDIR)/Window.o: $(WINDOW) $(INCLUDE)
+	$(CC) $(ALL_CFLAGS) $(CFLAGS) -o $@ $<
+
+$(OBJDIR)/Timer.o: $(TIMER) $(INCLUDE)
 	$(CC) $(ALL_CFLAGS) $(CFLAGS) -o $@ $<
 
 $(OBJDIR)/Core.o: $(COREOBJS)

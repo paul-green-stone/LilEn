@@ -25,6 +25,10 @@ extern void LilEn_quit(void);
 */
 extern char* LilEn_read_data_file(const char* filename);
 
+/* ================================ */
+
+extern void LilEn_log_FPS(void);
+
 /* ================================================================ */
 
 #endif /* LILEN_CORE_H */

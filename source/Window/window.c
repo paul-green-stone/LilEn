@@ -5,7 +5,7 @@ Window_t g_window = NULL;
 /* ================================================================ */
 
 Window_t Window_new(const char* title, int w, int h, uint32_t w_flags, uint32_t r_flags) {
-
+        
     Window_t window = NULL;
 
     if ((window = (Window_t) malloc(sizeof(Window))) == NULL) {
