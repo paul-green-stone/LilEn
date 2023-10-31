@@ -5,9 +5,9 @@ COREOBJS	:= $(addprefix $(OBJDIR)/, core.o cJSON.o error.o)
 INCLUDE		:= source/include.h
 WINDOW		:= $(addprefix source/Window/, window.c window.h)
 TIMER		:= $(addprefix source/Timer/, timer.c timer.h)
-CORE		:= $(addprefix source/core/, core.c core.h)
-CJSON		:= $(addprefix source/core/, cJSON.c cJSON.h)
-ERROR		:= $(addprefix source/core/error/, error.c error.h)
+CORE		:= $(addprefix source/Core/, core.c core.h)
+CJSON		:= $(addprefix source/Core/cJSON/, cJSON.c cJSON.h)
+ERROR		:= $(addprefix source/Core/Error/, error.c error.h)
 
 LIBRARY 	:= liblilen.a
 

@@ -14,7 +14,7 @@ extern int LilEn_init(void);
 /* ================================ */
 
 /**
- * 
+ * Quit the engine. Deallocate resources associated with it.
 */
 extern void LilEn_quit(void);
 
@@ -27,6 +27,9 @@ extern char* LilEn_read_data_file(const char* filename);
 
 /* ================================ */
 
+/**
+ * Outputs the FPS to the console.
+*/
 extern void LilEn_log_FPS(void);
 
 /* ================================================================ */

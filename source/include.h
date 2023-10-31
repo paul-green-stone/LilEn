@@ -15,10 +15,10 @@
 #include "globals.h"
 
 #include "Timer/timer.h"
-#include "core/core.h"
-#include "core/cJSON.h"
+#include "Core/core.h"
+#include "Core/cJSON/cJSON.h"
 #include "Window/window.h"
-#include "core/error/error.h"
+#include "Core/Error/error.h"
 
 /* ================================================================ */
 

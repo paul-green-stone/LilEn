@@ -38,18 +38,30 @@ extern void Timer_destroy(Timer_t* t);
 
 /* ================================ */
 
+/**
+ * Set a timer. Call then `Timer_is_ready` to check if the specified time has passed
+*/
 extern int Timer_set(const Timer_t t, float v);
 
 /* ================================ */
 
+/**
+ * Check if the specified amount of time has passed.
+*/
 extern int Timer_is_ready(const Timer_t t);
 
 /* ================================ */
 
+/**
+ * Reset the timer. Make it count seconds again.
+*/
 extern int Timer_reset(const Timer_t t);
 
 /* ================================ */
 
+/**
+ * Update a timer
+*/
 extern void Timer_tick(const Timer_t t);
 
 /* ================================================================ */
