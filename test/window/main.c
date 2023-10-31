@@ -40,13 +40,11 @@ int main(int argc, char** argv) {
 
             LilEn_log_FPS();
 
-            SDL_RenderPresent(g_window->renderer);
+            Window_update();
 
             Timer_reset(g_timer);
         }
     }
-
-    Window_destroy(&window);
 
     LilEn_quit();
 
