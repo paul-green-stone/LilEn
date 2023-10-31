@@ -1,8 +1,12 @@
 #include "../include.h"
 
+#define DEFAULT_SETTINGS "../../data/core/core.json"
+
 char g_filename[128];
 
 Timer_t g_timer = NULL;
+
+SDL_Color* g_color = NULL;
 
 /* ================================================================ */
 /* ============================ STATIC ============================ */
@@ -109,7 +113,7 @@ char* LilEn_read_data_file(const char* filename) {
 
 /* ================================================================ */
 
-extern int LilEn_init(void) {
+extern int LilEn_init(const char* filename) {
 
     /* core.json file content */
     char* core_input = NULL;
@@ -127,6 +131,12 @@ extern int LilEn_init(void) {
 
     /* ================================================================ */
 
+    if ((g_color = (SDL_Color*) calloc(1, sizeof(SDL_Color))) == NULL) {
+        goto CLEANUP;
+    }
+
+    /* ================================================================ */
+
     if ((g_timer = Timer_new()) == NULL) {
         goto CLEANUP;
     }
@@ -137,7 +147,7 @@ extern int LilEn_init(void) {
 
     {
         /* Read data from a file */
-        if ((core_input = LilEn_read_data_file("../../data/core/core.json")) == NULL) {
+        if ((core_input = LilEn_read_data_file(filename == NULL ? DEFAULT_SETTINGS : filename)) == NULL) {
             goto CLEANUP;
         }
 
@@ -259,6 +269,8 @@ void LilEn_quit(void) {
     Timer_destroy(&g_timer);
     Window_destroy(&g_window);
 
+    free(g_color);
+
     IMG_Quit();
     SDL_Quit();
 
@@ -272,6 +284,28 @@ void LilEn_log_FPS(void) {
     if (g_timer != NULL) {
         printf("FPS: %.2f\n", 1.0f / g_timer->acc);
     }
+
+    return ;
+}
+
+/* ================================================================ */
+
+void LilEn_set_colorRGB(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+
+    *g_color = (SDL_Color) {r, g, b, a};
+
+    SDL_SetRenderDrawColor(g_window->renderer, g_color->r, g_color->g, g_color->b, g_color->a);
+
+    return ;
+}
+
+/* ================================================================ */
+
+void LilEn_set_colorHEX(uint32_t c) {
+    
+    *g_color = (SDL_Color) {(c >> 16) & 0xFF, (c >> 8) & 0xFF, c & 0xFF, 0xFF};
+
+    SDL_SetRenderDrawColor(g_window->renderer, g_color->r, g_color->g, g_color->b, g_color->a);
 
     return ;
 }

@@ -9,7 +9,7 @@
  * Start up the engine routine. The function initializes SDL2, SDL_image library and a standard random number generator.
  * It also initializes some of the global variables. Use `core.json` to specify flags to be initialized.
 */
-extern int LilEn_init(void);
+extern int LilEn_init(const char* filename);
 
 /* ================================ */
 
@@ -31,6 +31,17 @@ extern char* LilEn_read_data_file(const char* filename);
  * Outputs the FPS to the console.
 */
 extern void LilEn_log_FPS(void);
+
+/* ================================ */
+
+/**
+ * 
+*/
+extern void LilEn_set_colorRGB(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+
+/* ================================ */
+
+extern void LilEn_set_colorHEX(uint32_t c);
 
 /* ================================================================ */
 

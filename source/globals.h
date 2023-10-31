@@ -14,6 +14,9 @@ extern Window_t g_window;
 /* A global timer available everywhere */
 extern Timer_t g_timer;
 
+/* A global color available everywhere */
+extern SDL_Color* g_color;
+
 /* ================================================================ */
 
 #endif /* LILEN_GLOBALS_H */

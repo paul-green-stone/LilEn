@@ -6,7 +6,7 @@ int main(int argc, char** argv) {
     int running = 1;
     SDL_Event e;
 
-    if (LilEn_init() == EXIT_FAILURE) {
+    if (LilEn_init(NULL) == EXIT_FAILURE) {
 
         LilEn_print_error();
 
@@ -21,6 +21,8 @@ int main(int argc, char** argv) {
     }
 
     while (running) {
+
+        LilEn_set_colorRGB(255, 255, 255, 255);
 
         Timer_tick(g_timer);
 
@@ -38,9 +40,15 @@ int main(int argc, char** argv) {
 
         if (Timer_is_ready(g_timer)) {
 
+            Window_clear(NULL);
+
+            LilEn_set_colorHEX(0x000000);
+
             LilEn_log_FPS();
 
-            Window_update();
+            Window_display_grid(NULL, 5);
+
+            Window_update(NULL);
 
             Timer_reset(g_timer);
         }
