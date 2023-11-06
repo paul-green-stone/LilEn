@@ -309,3 +309,23 @@ void LilEn_set_colorHEX(uint32_t c) {
 
     return ;
 }
+
+/* ================================================================ */
+
+void LilEn_draw_rect(const Window_t w, const SDL_Rect* r) {
+
+    if (r == NULL) {
+        return ;
+    }
+
+    if ((w == NULL) && (g_window) == NULL) {
+
+        /* Implement a mechanism to handle this situation */
+
+        return ;
+    }   
+
+    SDL_RenderFillRect((w == NULL) ? g_window->renderer : w->renderer, r);
+
+    return ;
+}

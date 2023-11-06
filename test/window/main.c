@@ -6,6 +6,8 @@ int main(int argc, char** argv) {
     int running = 1;
     SDL_Event e;
 
+    SDL_Rect r = {50, 50, 100, 120};
+
     if (LilEn_init(NULL) == EXIT_FAILURE) {
 
         LilEn_print_error();
@@ -47,6 +49,7 @@ int main(int argc, char** argv) {
             LilEn_log_FPS();
 
             Window_display_grid(NULL, 5);
+            draw_rect(&r);
 
             Window_update(NULL);
 
