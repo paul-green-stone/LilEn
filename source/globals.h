@@ -1,7 +1,7 @@
 #ifndef LILEN_GLOBALS_H
 #define LILEN_GLOBALS_H
 
-#include "include.h"
+#include "LilEn.h"
 
 /* ================================================================ */
 

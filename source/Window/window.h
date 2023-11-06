@@ -1,7 +1,7 @@
 #ifndef LILEN_WINDOW_H
 #define LILEN_WINDOW_H
 
-#include "../include.h"
+#include "../LilEn.h"
 
 /* ================================================================ */
 

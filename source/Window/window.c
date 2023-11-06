@@ -1,4 +1,4 @@
-#include "../include.h"
+#include "../LilEn.h"
 
 Window_t g_window = NULL;
 

@@ -1,7 +1,7 @@
 #ifndef LILEN_CORE_H
 #define LILEN_CORE_H
 
-#include "../include.h"
+#include "../LilEn.h"
 
 /* ================================================================ */
 

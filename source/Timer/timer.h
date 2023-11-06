@@ -1,7 +1,7 @@
 #ifndef LILEN_TIMER_H
 #define LILEN_TIMER_H
 
-#include "../include.h"
+#include "../LilEn.h"
 
 /* ================================================================ */
 

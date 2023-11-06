@@ -1,4 +1,4 @@
-#include "../../source/include.h"
+#include "../../source/LilEn.h"
 
 int main(int argc, char** argv) {
 
