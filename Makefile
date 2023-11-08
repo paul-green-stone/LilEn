@@ -53,7 +53,7 @@ $(OBJDIR)/cJSON.o: $(CJSON) $(INCLUDE)
 	$(CC) $(ALL_CFLAGS) $(CFLAGS) -o $@ $<
 
 install:
-	$(CC) -shared -o $(SHARED).so $(OBJDIR)/*.o
+	$(CC) -shared -o $(SHARED) $(OBJDIR)/*.o
 	mkdir -p $(INCLUDEDIR)/LilEn
 	cp ./source/*.h $(INCLUDEDIR)/LilEn
 	cp -rf ./source/*/ $(INCLUDEDIR)/LilEn

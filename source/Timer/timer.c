@@ -19,7 +19,7 @@ Timer_t Timer_new(void) {
 
 extern void Timer_destroy(Timer_t* t) {
 
-    if ((t == NULL) || (t != NULL)) {
+    if ((t == NULL) || (t == NULL)) {
         return ;
     }
 
