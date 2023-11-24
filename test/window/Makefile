@@ -3,7 +3,7 @@ CC := gcc
 CFLAGS := -g
 ALL_CFLAGS := -Wall -Wextra -pedantic-errors -O2
 
-LDFLAGS := -lSDL2 -lSDL2_image -lm ../../liblilen.a 
+LDFLAGS := `pkg-config --libs SDL2_image` `pkg-config --cflags SDL2_image` `pkg-config --libs sdl2` `pkg-config --cflags sdl2` -lm ../../liblilen.a 
 
 PROG := a.out
 

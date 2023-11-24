@@ -10,6 +10,8 @@
 */
 #define draw_rect(r) (LilEn_draw_rect(g_window, r))
 
+/* ================================ */
+
 /**
  * Start up the engine routine. The function initializes SDL2, SDL_image library and a standard random number generator.
  * It also initializes some of the global variables. Use `core.json` to specify flags to be initialized.
@@ -46,6 +48,9 @@ extern void LilEn_set_colorRGB(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
 /* ================================ */
 
+/**
+ * 
+*/
 extern void LilEn_set_colorHEX(uint32_t c);
 
 /* ================================ */

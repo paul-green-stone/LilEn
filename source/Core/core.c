@@ -1,12 +1,21 @@
 #include "../LilEn.h"
 
-#define DEFAULT_SETTINGS "../../data/core/core.json"
-
-char g_filename[128];
+#define DEFAULT_SETTINGS "../../config/core.json"
 
 Timer_t g_timer = NULL;
 
 SDL_Color* g_color = NULL;
+
+/**
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+*/
 
 /* ================================================================ */
 /* ============================ STATIC ============================ */
@@ -70,55 +79,26 @@ static int LilEn_lookup_SDL_image(const char* flag) {
     return -1;
 }
 
+/**
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+*/
+
 /* ================================================================ */
 /* ============================ EXTERN ============================ */
 /* ================================================================ */
 
-char* LilEn_read_data_file(const char* filename) {
-
-    FILE* input = NULL;
-    char* buffer = NULL;
-    ssize_t file_size;
-
-    if (filename == NULL) {
-        return NULL;
-    }
-
-    strncpy(g_filename, filename, 128 - 1);
-
-    if ((input = fopen(filename, "r")) == NULL) {
-        return buffer;
-    }
-
-    /* Get the file size */
-    fseek(input, 0, SEEK_END);
-    file_size = ftell(input);
-    rewind(input);
-
-    /* Allocate memory for the buffer */
-    if ((buffer = (char*) malloc(sizeof(char) * file_size)) == NULL) {
-
-        fclose(input);
-
-        return buffer;
-    }
-
-    /* Read the file into the buffer */
-    fread(buffer, sizeof(char), file_size, input);
-
-    fclose(input);
-
-    return buffer;
-}
-
-/* ================================================================ */
 
 extern int LilEn_init(const char* filename) {
 
-    /* core.json file content */
-    char* core_input = NULL;
     /* Parsed .json */
-    cJSON* core_root_json = NULL;
+    cJSON* root = NULL;
     
     size_t array_size;
     size_t i = 0;
@@ -147,16 +127,11 @@ extern int LilEn_init(const char* filename) {
 
     {
         /* Read data from a file */
-        if ((core_input = LilEn_read_data_file(filename == NULL ? DEFAULT_SETTINGS : filename)) == NULL) {
+        if ((root = LilEn_read_json(filename == NULL ? DEFAULT_SETTINGS : filename)) == NULL) {
             goto CLEANUP;
         }
 
-        /* Parse the data .json file */
-        if ((core_root_json = cJSON_Parse(core_input)) == NULL) {
-            goto CLEANUP;
-        }
-
-        if ((json_data = cJSON_GetObjectItemCaseSensitive(core_root_json, "SDL2")) == NULL) {
+        if ((json_data = cJSON_GetObjectItemCaseSensitive(root, "SDL2")) == NULL) {
             goto CLEANUP;
         }
 
@@ -195,7 +170,7 @@ extern int LilEn_init(const char* filename) {
     flags = 0;
 
     {
-        if ((json_data = cJSON_GetObjectItemCaseSensitive(core_root_json, "SDL_image")) == NULL) {
+        if ((json_data = cJSON_GetObjectItemCaseSensitive(root, "SDL_image")) == NULL) {
             goto CLEANUP;
         }
 
@@ -229,7 +204,7 @@ extern int LilEn_init(const char* filename) {
 
     /* ================================================================ */
 
-    if ((json_data = cJSON_GetObjectItemCaseSensitive(core_root_json, "FPS")) == NULL) {
+    if ((json_data = cJSON_GetObjectItemCaseSensitive(root, "FPS")) == NULL) {
         Timer_set(g_timer, 1.0f / 60);
     }
 
@@ -237,8 +212,10 @@ extern int LilEn_init(const char* filename) {
 
     /* ================================================================ */
 
-    cJSON_Delete(core_root_json);
-    free(core_input);
+    /* Initializing a random number generator */
+    srand((unsigned) time(0));
+
+    cJSON_Delete(root);
 
     return EXIT_SUCCESS;
 
@@ -248,13 +225,8 @@ extern int LilEn_init(const char* filename) {
 
     CLEANUP:
 
-        /* Free memory */
-        if (core_input != NULL) {
-            free(core_input);
-        }
-
-        if (core_root_json != NULL) {
-            cJSON_Delete(core_root_json);
+        if (root != NULL) {
+            cJSON_Delete(root);
         }
 
         LilEn_quit();
@@ -329,3 +301,7 @@ void LilEn_draw_rect(const Window_t w, const SDL_Rect* r) {
 
     return ;
 }
+
+/* ================================================================ */
+
+#undef DEFAULT_SETTINGS
