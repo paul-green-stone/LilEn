@@ -9,6 +9,9 @@ typedef Window* Window_t;
 typedef struct timer Timer;
 typedef Timer* Timer_t;
 
+typedef struct text Text;
+typedef Text* Text_t;
+
 /* ================================================================ */
 
 #endif /* LILEN_TYPES_H */

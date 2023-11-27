@@ -1,4 +1,4 @@
-#include "../LilEn.h"
+#include "../../LilEn.h"
 
 #define DEFAULT_SETTINGS "../../config/core.json"
 
@@ -94,7 +94,6 @@ static int LilEn_lookup_SDL_image(const char* flag) {
 /* ============================ EXTERN ============================ */
 /* ================================================================ */
 
-
 extern int LilEn_init(const char* filename) {
 
     /* Parsed .json */
@@ -111,109 +110,96 @@ extern int LilEn_init(const char* filename) {
 
     /* ================================================================ */
 
+    /* Initializing a random number generator */
+    srand((unsigned) time(0));
+
     if ((g_color = (SDL_Color*) calloc(1, sizeof(SDL_Color))) == NULL) {
         goto CLEANUP;
     }
-
-    /* ================================================================ */
 
     if ((g_timer = Timer_new()) == NULL) {
         goto CLEANUP;
     }
 
     /* ================================================================ */
-    /* =========== Retrieving SDL flags from the core file ============ */
-    /* ================================================================ */
 
-    {
-        /* Read data from a file */
-        if ((root = LilEn_read_json(filename == NULL ? DEFAULT_SETTINGS : filename)) == NULL) {
-            goto CLEANUP;
-        }
-
-        if ((json_data = cJSON_GetObjectItemCaseSensitive(root, "SDL2")) == NULL) {
-            goto CLEANUP;
-        }
-
-        if (!cJSON_IsArray(json_data)) {
-            goto CLEANUP;
-        }
-
-        array_size = (size_t) cJSON_GetArraySize(json_data);
-
-        for (; i < array_size; i++) {
-
-            int flag = 0;
-
-            cJSON* item = cJSON_GetArrayItem(json_data, i);
-
-            if ((flag = LilEn_lookup_SDL(item->valuestring)) == -1) {
-                continue ;
-            }
-
-            flags |= flag;
-        }
-    }
+    root = LilEn_read_json(filename == NULL ? DEFAULT_SETTINGS : filename);
 
     /* ================================================================ */
     /* ================= Initializing a SDL2 Library ================== */
     /* ================================================================ */
 
-    if (SDL_Init(flags) != 0) {
-        goto CLEANUP;
-    }
-
-    /* ================================================================ */
-    /* ======== Retrieving SDL_image flags from the core file ========= */
-    /* ================================================================ */
-
-    flags = 0;
-
     {
-        if ((json_data = cJSON_GetObjectItemCaseSensitive(root, "SDL_image")) == NULL) {
-            goto CLEANUP;
+        json_data = Data_read("SDL2", root, cJSON_IsArray);
+
+        if (json_data == NULL) {
+            if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+                goto CLEANUP;
+            }
         }
+        else {
+            array_size = (size_t) cJSON_GetArraySize(json_data);
 
-        if (!cJSON_IsArray(json_data)) {
-            goto CLEANUP;
-        }
+            for (i = 0; i < array_size; i++) {
+                int flag = 0;
 
-        array_size = (size_t) cJSON_GetArraySize(json_data);
+                cJSON* item = cJSON_GetArrayItem(json_data, i);
 
-        for (i = 0; i < array_size; i++) {
-
-            int flag = 0;
-
-            cJSON* item = cJSON_GetArrayItem(json_data, i);
-
-            if ((flag = LilEn_lookup_SDL_image(item->valuestring)) == -1) {
-                continue ;
+                flags |= ((flag = LilEn_lookup_SDL(item->valuestring)) == -1) ? 0 : flag;
             }
 
-            flags |= flag;
+            if (SDL_Init(flags) != 0) {
+                goto CLEANUP;
+            }
         }
     }
+
+    flags = 0;
 
     /* ================================================================ */
     /* =============== Initializing a SDL_image Library =============== */
     /* ================================================================ */
 
-    if (!(IMG_Init(flags) & flags)) {
+    {
+        json_data = Data_read("SDL_image", root, cJSON_IsArray);
+        
+        if (json_data == NULL) {
+            if (!(IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) & flags)) {
+                goto CLEANUP;
+            }
+        }
+        else {
+            array_size = (size_t) cJSON_GetArraySize(json_data);
+
+            for (i = 0; i < array_size; i++) {
+
+                int flag = 0;
+
+                cJSON* item = cJSON_GetArrayItem(json_data, i);
+
+                flags |= ((flag = LilEn_lookup_SDL_image(item->valuestring)) == -1) ? 0 : flag;
+            }
+
+            if (!(IMG_Init(flags) & flags)) {
+                goto CLEANUP;
+            }
+        }   
+    }
+
+    /* ================================================================ */
+    /* ================ Initializing a SDL_ttf Library ================ */
+    /* ================================================================ */
+
+    if (TTF_Init() == -1) {
         goto CLEANUP;
     }
 
     /* ================================================================ */
 
-    if ((json_data = cJSON_GetObjectItemCaseSensitive(root, "FPS")) == NULL) {
-        Timer_set(g_timer, 1.0f / 60);
-    }
-
-    Timer_set(g_timer, 1.0f / json_data->valueint);
+    json_data = Data_read("FPS", root, cJSON_IsNumber);
+    Timer_set(g_timer, (json_data != NULL) ? 1.0f / json_data->valueint : 1.0f / 60);
 
     /* ================================================================ */
-
-    /* Initializing a random number generator */
-    srand((unsigned) time(0));
 
     cJSON_Delete(root);
 
@@ -243,6 +229,7 @@ void LilEn_quit(void) {
 
     free(g_color);
 
+    TTF_Quit();
     IMG_Quit();
     SDL_Quit();
 

@@ -1,4 +1,4 @@
-#include "../../LilEn.h"
+#include "../../../LilEn.h"
 
 #define BUFFER 1024
 
@@ -38,16 +38,20 @@ void LilEn_print_error(void) {
         return ;
     }
 
-    /* ======================= SDL_image error ======================== */
+    // /* ======================= SDL_image error ======================== */
 
-    strncpy(error_msg, (char*) IMG_GetError(), BUFFER - 1);
+    // strncpy(error_msg, (char*) IMG_GetError(), BUFFER - 1);
 
-    if (error_msg[0] != '\0') {
+    // if (error_msg[0] != '\0') {
 
-        fprintf(stderr, "%serror%s: %s\n", ANSI_COLOR_RED, ANSI_COLOR_RESET, error_msg);
+    //     fprintf(stderr, "%serror%s: %s\n", ANSI_COLOR_RED, ANSI_COLOR_RESET, error_msg);
 
-        return ;
-    }
+    //     return ;
+    // }
+
+    // /* ======================== SDL_ttf error ========================= */
+
+    // strncpy(error_msg, (char*) TTF_GetError(), BUFFER - 1);
 
     /* ========================= cJSON error ========================== */
 

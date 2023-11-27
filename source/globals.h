@@ -1,7 +1,7 @@
 #ifndef LILEN_GLOBALS_H
 #define LILEN_GLOBALS_H
 
-#include "LilEn.h"
+#include "../LilEn.h"
 
 #define MAX_FILE_LEN 128
 

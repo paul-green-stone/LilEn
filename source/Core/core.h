@@ -1,7 +1,7 @@
 #ifndef LILEN_CORE_H
 #define LILEN_CORE_H
 
-#include "../LilEn.h"
+#include "../../LilEn.h"
 
 /* ================================================================ */
 
@@ -14,7 +14,7 @@
 
 /**
  * Start up the engine routine. The function initializes SDL2, SDL_image library and a standard random number generator.
- * It also initializes some of the global variables. Use `core.json` to specify flags to be initialized.
+ * It also initializes some of the global variables. Use `filename.json` to specify flags to be initialized.
 */
 extern int LilEn_init(const char* filename);
 
