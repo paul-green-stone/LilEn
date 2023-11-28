@@ -3,6 +3,8 @@
 
 #include "../../LilEn.h"
 
+#define RAND_RANGE(min, max) (min + rand() / (RAND_MAX / (max - min + 1) + 1))
+
 /* ================================================================ */
 
 /**

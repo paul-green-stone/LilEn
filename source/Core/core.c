@@ -201,7 +201,9 @@ extern int LilEn_init(const char* filename) {
 
     /* ================================================================ */
 
-    cJSON_Delete(root);
+    if (root != NULL) {
+        cJSON_Delete(root);
+    }
 
     return EXIT_SUCCESS;
 
