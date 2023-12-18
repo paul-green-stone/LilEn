@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
 
     SDL_Rect r = {50, 50, 100, 120};
 
-    if (LilEn_init(NULL) == EXIT_FAILURE) {
+    if (LilEn_init("core.json") == EXIT_FAILURE) {
 
         LilEn_print_error();
 
@@ -25,6 +25,9 @@ int main(int argc, char** argv) {
 
         return EXIT_FAILURE;
     }
+
+    printf("Current audio driver: %s\n", SDL_GetCurrentAudioDriver());
+
 
     TTF_Font* font = Font_load("montserrat.regular.ttf", 16);
 

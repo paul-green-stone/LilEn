@@ -94,7 +94,7 @@ void Window_display_grid(const Window_t w, int cell) {
     int width = 0;
     int height = 0;
 
-    size_t i = 0;
+    size_t i = 1;
 
     /* ================================ */
 
@@ -109,7 +109,7 @@ void Window_display_grid(const Window_t w, int cell) {
     }
 
     /* Drawing rows */
-    for (i = 0; i < rows; i++) {
+    for (i = 1; i < rows; i++) {
         SDL_RenderDrawLine(target->renderer, 0, i * cell, width, i * cell);
     } 
 

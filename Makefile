@@ -30,16 +30,12 @@ AR 			:= ar
 ARFLAGS 	:= -r -c
 
 LD			:= ld
-LDFLAGS 	:= `pkg-config --cflags --libs sdl2` `pkg-config --cflags --libs SDL2_image` `pkg-config --cflags --libs SDL2_ttf` -lm
+LDFLAGS 	:= `pkg-config --cflags --libs sdl2` `pkg-config --cflags --libs SDL2_image` `pkg-config --cflags --libs SDL2_ttf` `pkg-config --cflags --libs SDL2_mixer` -lm
 
 CC			:= gcc
-CFLAGS 		:= -g -c `pkg-config --cflags --libs sdl2` `pkg-config --cflags --libs SDL2_image` `pkg-config --cflags --libs SDL2_ttf` -lm
+CFLAGS 		:= -g -c `pkg-config --cflags --libs sdl2` `pkg-config --cflags --libs SDL2_image` `pkg-config --cflags --libs SDL2_ttf` `pkg-config --cflags --libs SDL2_mixer` -lm
 
 ALL_CFLAGS 	:= -Wall -Wextra -pedantic-errors -fPIC -O2
-
-PREFIX		:= /usr/local
-INCLUDEDIR 	:= $(PREFIX)/include
-LIBDIR		:= $(PREFIX)/lib
 
 # ================================================================ #
 
@@ -83,17 +79,6 @@ $(OBJDIR)/cJSON.o: $(CJSON) $(INCLUDE)
 
 # ================================================================ #
 
-install:
-	$(CC) -shared -o $(SHARED) $(OBJDIR)/*.o
-	mkdir -p $(INCLUDEDIR)/LilEn
-	cp ./source/*.h $(INCLUDEDIR)/LilEn
-	cp -rf ./source/*/ $(INCLUDEDIR)/LilEn
-	mv $(SHARED) $(LIBDIR)
-
-uninstall:
-	rm -rf $(INCLUDEDIR)/LilEn
-	rm -rf $(LIBDIR)/$(SHARED)
-
 $(shell mkdir -p $(OBJDIR))
 
 # ================================ #
@@ -101,4 +86,4 @@ $(shell mkdir -p $(OBJDIR))
 .PHONY: clean
 
 clean:
-	rm -rf $(OBJDIR) $(LIBRARY)
+	rm -rf $(OBJDIR) $(STATIC) $(SHARED)
