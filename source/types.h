@@ -12,6 +12,9 @@ typedef Timer* Timer_t;
 typedef struct text Text;
 typedef Text* Text_t;
 
+typedef struct texture Texture;
+typedef Texture* Texture_t;
+
 /* ================================================================ */
 
 #endif /* LILEN_TYPES_H */

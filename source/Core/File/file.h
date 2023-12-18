@@ -1,7 +1,7 @@
 #ifndef LILEN_FILE_H
 #define LILEN_FILE_H
 
-#include "../../../LilEn.h"
+#include "../../LilEn.h"
 
 /* ================================================================ */
 

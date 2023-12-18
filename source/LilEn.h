@@ -13,16 +13,17 @@
 #include <errno.h>
 #include <time.h>
 
-#include "source/types.h"
-#include "source/globals.h"
+#include "types.h"
+#include "globals.h"
 
-#include "source/Text/text.h"
-#include "source/Core/cJSON/cJSON.h"
-#include "source/Timer/timer.h"
-#include "source/Core/File/file.h"
-#include "source/Core/core.h"
-#include "source/Window/window.h"
-#include "source/Core/Error/error.h"
+#include "Text/text.h"
+#include "Core/cJSON/cJSON.h"
+#include "Timer/timer.h"
+#include "Core/File/file.h"
+#include "Core/core.h"
+#include "Window/window.h"
+#include "Core/Error/error.h"
+#include "Texture/texture.h"
 
 /* ================================================================ */
 

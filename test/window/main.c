@@ -1,4 +1,4 @@
-#include "../../LilEn.h"
+#include "../../source/LilEn.h"
 
 int main(int argc, char** argv) {
 
@@ -26,8 +26,9 @@ int main(int argc, char** argv) {
         return EXIT_FAILURE;
     }
 
-    printf("Current audio driver: %s\n", SDL_GetCurrentAudioDriver());
+    Texture_t bg = Texture_new("bg.jpg", window);
 
+    printf("bg = %p\n", bg);
 
     TTF_Font* font = Font_load("montserrat.regular.ttf", 16);
 
@@ -63,6 +64,8 @@ int main(int argc, char** argv) {
 
             Window_clear(NULL);
 
+            Texture_display(bg, NULL, NULL);
+
             LilEn_set_colorHEX(0xff0000);
             Text_update(t, fps_buffer, font);
 
@@ -83,6 +86,9 @@ int main(int argc, char** argv) {
     }
 
     Text_destroy(&t);
+    Texture_destroy(&bg);
+
+    printf("bg == NULL = %d\n", bg == NULL);
 
     Font_unload(font);
     LilEn_quit();

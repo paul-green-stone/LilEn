@@ -1,4 +1,4 @@
-#include "../../../LilEn.h"
+#include "../../LilEn.h"
 
 char g_filename[MAX_FILE_LEN];
 
