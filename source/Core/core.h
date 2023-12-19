@@ -12,6 +12,8 @@
 */
 #define draw_rect(r) (LilEn_draw_rect(g_window, r))
 
+#define outline_rect(r) (LilEn_outline_rect(g_window, r))
+
 /* ================================ */
 
 /**
@@ -61,6 +63,14 @@ extern void LilEn_set_colorHEX(uint32_t c);
  * Draw a rectangle in the screen.
 */
 extern void LilEn_draw_rect(const Window_t w, const SDL_Rect* r);
+
+/* ================================ */
+
+extern void LilEn_outline_rect(const Window_t w, const SDL_Rect* r);
+
+/* ================================ */
+
+extern int LilEn_is_inside(const SDL_Rect* rect, const SDL_Point* point);
 
 /* ================================================================ */
 

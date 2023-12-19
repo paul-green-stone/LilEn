@@ -24,6 +24,7 @@
 #include "Window/window.h"
 #include "Core/Error/error.h"
 #include "Texture/texture.h"
+#include "Button/button.h"
 
 /* ================================================================ */
 

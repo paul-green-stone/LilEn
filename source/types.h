@@ -15,6 +15,9 @@ typedef Text* Text_t;
 typedef struct texture Texture;
 typedef Texture* Texture_t;
 
+typedef struct button Button;
+typedef Button* Button_t;
+
 /* ================================================================ */
 
 #endif /* LILEN_TYPES_H */

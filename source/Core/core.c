@@ -300,4 +300,34 @@ void LilEn_draw_rect(const Window_t w, const SDL_Rect* r) {
 
 /* ================================================================ */
 
+void LilEn_outline_rect(const Window_t w, const SDL_Rect* r) {
+
+    if (r == NULL) {
+        return ;
+    }
+
+    if ((w == NULL) && (g_window) == NULL) {
+
+        /* Implement a mechanism to handle this situation */
+
+        return ;
+    }   
+
+    SDL_RenderDrawRect((w == NULL) ? g_window->renderer : w->renderer, r);
+
+    return ;
+}
+
+int LilEn_is_inside(const SDL_Rect* rect, const SDL_Point* point) {
+
+    /* Let's assume that both rect and point are not NULL values */
+
+    return (
+        (point->x > rect->x)
+        && (point->x < rect->x + rect->w)
+        && (point->y > rect->y)
+        && (point->y < rect->h + rect->h)
+    );
+}
+
 #undef DEFAULT_SETTINGS

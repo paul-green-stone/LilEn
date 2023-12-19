@@ -1,5 +1,5 @@
 OBJDIR		:= objects
-OBJS 		:= $(addprefix $(OBJDIR)/, Window.o Core.o Timer.o Text.o Texture.o)
+OBJS 		:= $(addprefix $(OBJDIR)/, Window.o Core.o Timer.o Text.o Texture.o Button.o)
 COREOBJS	:= $(addprefix $(OBJDIR)/, core.o cJSON.o error.o file.o)
 
 INCLUDE		:= source/LilEn.h
@@ -19,6 +19,10 @@ TEXT		:= $(addprefix source/Text/, text.c text.h)
 # ================================================================ #
 # Texture module
 TEXTURE		:= $(addprefix source/Texture/, texture.c texture.h)
+
+# ================================================================ #
+# Button module
+BUTTON		:= $(addprefix source/Button/, button.c button.h)
 
 # ================================================================ #
 # Core module 
@@ -61,6 +65,11 @@ $(OBJDIR)/Timer.o: $(TIMER) $(INCLUDE)
 # ================================================================ #
 # Text module 
 $(OBJDIR)/Text.o: $(TEXT) $(INCLUDE)
+	$(CC) $(ALL_CFLAGS) $(CFLAGS) -o $@ $<
+
+# ================================================================ #
+# Button module 
+$(OBJDIR)/Button.o: $(BUTTON) $(INCLUDE)
 	$(CC) $(ALL_CFLAGS) $(CFLAGS) -o $@ $<
 
 # ================================================================ #

@@ -1,5 +1,25 @@
 #include "../../source/LilEn.h"
 
+/* ================================================================ */
+
+static void say_hello_on_hover(void* args) {
+    printf("Hello from a button on hover!\n");
+}
+
+static void foo(void* btn) {
+    Button_t b = NULL;
+
+    b = (Button_t) btn;
+
+    b->dimensions.w = 100;
+}
+
+static void say_hello_on_click(void* args) {
+    printf("Hello from a button on click!\n");
+}
+
+/* ================================================================ */
+
 int main(int argc, char** argv) {
 
     Window_t window = NULL;
@@ -11,6 +31,8 @@ int main(int argc, char** argv) {
     Text_t t = NULL;
 
     SDL_Rect r = {50, 50, 100, 120};
+
+    SDL_Point position;
 
     if (LilEn_init("core.json") == EXIT_FAILURE) {
 
@@ -26,19 +48,19 @@ int main(int argc, char** argv) {
         return EXIT_FAILURE;
     }
 
-    Texture_t bg = Texture_new("bg.jpg", window);
+    Button_t button = Button_new(10, 10, 64, 32);
+    button->on_hover = foo;
+    button->on_click = say_hello_on_click;
 
-    printf("bg = %p\n", bg);
+    printf("button = %d\n", button != NULL);
+
+    Texture_t bg = Texture_new("bg.jpg", window);
 
     TTF_Font* font = Font_load("montserrat.regular.ttf", 16);
 
     t = Text_new("FPS:", font);
     t->position.x = 640 / 2;
     t->position.y = 480 / 2;
-
-    if (t != NULL) {
-        printf("OK\n");
-    }
 
     while (running) {
 
@@ -55,6 +77,22 @@ int main(int argc, char** argv) {
                     running = !running;
 
                     break ;
+
+                case SDL_MOUSEMOTION:
+
+                    SDL_GetMouseState(&position.x, &position.y);
+
+                    Button_check(button, &e.button, &position, button);
+
+                    break ;
+
+                case SDL_MOUSEBUTTONDOWN:
+
+                    if (e.button.button == SDL_BUTTON_LEFT) {
+                        Button_check(button, &e.button, &position, NULL);
+                    }
+
+                    break ;    
             }
         }
 
@@ -76,6 +114,11 @@ int main(int argc, char** argv) {
 
             // Window_display_grid(NULL, 5);
             //draw_rect(&r);
+
+            LilEn_set_colorRGB(255, 255, 255, 255);
+            Button_display(button, NULL);
+
+            //Button_check(button, &e.button, &position);
 
             Text_display(t, NULL);
 
