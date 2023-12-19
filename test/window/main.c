@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
 
     SDL_Rect r = {50, 50, 100, 120};
 
-    if (LilEn_init("core.json") == EXIT_FAILURE) {
+    if (LilEn_init(NULL) == EXIT_FAILURE) {
 
         LilEn_print_error();
 
@@ -28,9 +28,7 @@ int main(int argc, char** argv) {
 
     Texture_t bg = Texture_new("bg.jpg", window);
 
-    printf("bg = %p\n", bg);
-
-    TTF_Font* font = Font_load("montserrat.regular.ttf", 16);
+    TTF_Font* font = Font_load("PressStart2P-Regular.ttf", 6);
 
     t = Text_new("FPS:", font);
     t->position.x = 640 / 2;

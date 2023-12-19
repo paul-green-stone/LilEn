@@ -64,15 +64,14 @@ $(OBJDIR)/Text.o: $(TEXT) $(INCLUDE)
 	$(CC) $(ALL_CFLAGS) $(CFLAGS) -o $@ $<
 
 # ================================================================ #
-# Core module 
-$(OBJDIR)/Core.o: $(COREOBJS)
-	$(LD) -r -o $@ $^
-	rm $(COREOBJS)
-
-# ================================================================ #
 # Texture module
 $(OBJDIR)/Texture.o: $(TEXTURE) $(INCLUDE)
 	$(CC) $(ALL_CFLAGS) $(CFLAGS) -o $@ $<
+
+# ================================================================ #
+# Core module 
+$(OBJDIR)/Core.o: $(COREOBJS)
+	$(LD) -r -o $@ $^
 
 $(OBJDIR)/core.o: $(CORE) $(INCLUDE)
 	$(CC) $(ALL_CFLAGS) $(CFLAGS) -o $@ $<
