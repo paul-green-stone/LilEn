@@ -11,11 +11,28 @@ static void foo(void* btn) {
 
     b = (Button_t) btn;
 
-    b->dimensions.w = 100;
+    if (b->dimensions.w >= 100) {
+        return ;
+    }
+
+    b->dimensions.w += 1;
 }
 
-static void say_hello_on_click(void* args) {
-    printf("Hello from a button on click!\n");
+static void goo(void* btn) {
+
+    Button_t b = NULL;
+
+    b = (Button_t) btn;
+
+    b->dimensions.w = 64;
+}
+
+static void left(void* args) {
+    printf("The left button has been clicked\n");
+}
+
+static void right(void* args) {
+    printf("The right button has been clicked\n");
 }
 
 /* ================================================================ */
@@ -48,15 +65,17 @@ int main(int argc, char** argv) {
         return EXIT_FAILURE;
     }
 
-    Button_t button = Button_new(10, 10, 64, 32);
-    button->on_hover = foo;
-    button->on_click = say_hello_on_click;
-
-    printf("button = %d\n", button != NULL);
-
     Texture_t bg = Texture_new("bg.jpg", window);
 
-    TTF_Font* font = Font_load("montserrat.regular.ttf", 16);
+    TTF_Font* font = Font_load("montserrat.regular.ttf", 12);
+
+    LilEn_set_colorHEX(0xff0000);
+    Button_t button = Button_new_Text(10, 10, 64, 32, "Left", font);
+    button->on_click = left;
+
+    LilEn_set_colorHEX(0x00ff00);
+    Button_t rb = Button_new_Text(640 - 74, 10, 64, 32, "Right", font);
+    rb->on_click = right;
 
     t = Text_new("FPS:", font);
     t->position.x = 640 / 2;
@@ -70,6 +89,8 @@ int main(int argc, char** argv) {
 
         while (SDL_PollEvent(&e)) {
 
+            SDL_GetMouseState(&position.x, &position.y);
+
             switch (e.type) {
 
                 case SDL_QUIT:
@@ -80,19 +101,23 @@ int main(int argc, char** argv) {
 
                 case SDL_MOUSEMOTION:
 
-                    SDL_GetMouseState(&position.x, &position.y);
-
-                    Button_check(button, &e.button, &position, button);
-
                     break ;
 
                 case SDL_MOUSEBUTTONDOWN:
 
                     if (e.button.button == SDL_BUTTON_LEFT) {
-                        Button_check(button, &e.button, &position, NULL);
+                        Button_click(button, &position, &running);
+                        Button_click(rb, &position, NULL);
+                    }
+                    
+                    break ;
+
+                case SDL_MOUSEBUTTONUP:
+
+                    if (e.button.button == SDL_BUTTON_LEFT) {
                     }
 
-                    break ;    
+                    break ;
             }
         }
 
@@ -117,8 +142,7 @@ int main(int argc, char** argv) {
 
             LilEn_set_colorRGB(255, 255, 255, 255);
             Button_display(button, NULL);
-
-            //Button_check(button, &e.button, &position);
+            Button_display(rb, NULL);
 
             Text_display(t, NULL);
 
@@ -130,6 +154,9 @@ int main(int argc, char** argv) {
 
     Text_destroy(&t);
     Texture_destroy(&bg);
+
+    Button_destroy(&button);
+    Button_destroy(&rb);
 
     printf("bg == NULL = %d\n", bg == NULL);
 
