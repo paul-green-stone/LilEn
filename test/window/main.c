@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
 
     SDL_Point position;
 
-    if (LilEn_init("core.json") == EXIT_FAILURE) {
+    if (LilEn_init(NULL) == EXIT_FAILURE) {
 
         LilEn_print_error();
 
