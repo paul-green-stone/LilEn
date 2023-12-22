@@ -49,9 +49,7 @@ int main(int argc, char** argv) {
 
     SDL_Rect r = {50, 50, 100, 120};
 
-    SDL_Point position;
-
-    if (LilEn_init("core.json") == EXIT_FAILURE) {
+    if (LilEn_init(NULL) == EXIT_FAILURE) {
 
         LilEn_print_error();
 
@@ -67,15 +65,7 @@ int main(int argc, char** argv) {
 
     Texture_t bg = Texture_new("bg.jpg", window);
 
-    TTF_Font* font = Font_load("montserrat.regular.ttf", 12);
-
-    LilEn_set_colorHEX(0xff0000);
-    Button_t button = Button_new_Text(10, 10, 64, 32, "Left", font);
-    button->on_click = left;
-
-    LilEn_set_colorHEX(0x00ff00);
-    Button_t rb = Button_new_Text(640 - 74, 10, 64, 32, "Right", font);
-    rb->on_click = right;
+    TTF_Font* font = Font_load("PressStart2P-Regular.ttf", 6);
 
     t = Text_new("FPS:", font);
     t->position.x = 640 / 2;
