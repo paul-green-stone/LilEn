@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
 
     Texture_t bg = Texture_new("bg.jpg", window);
 
-    TTF_Font* font = Font_load("montserrat.regular.ttf", 12);
+    TTF_Font* font = Font_load("PressStart2P-Regular.ttf", 12);
 
     LilEn_set_colorHEX(0xff0000);
     Button_t button = Button_new_Text(10, 10, 64, 32, "Left", font);
