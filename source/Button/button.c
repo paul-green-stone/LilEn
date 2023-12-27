@@ -10,7 +10,7 @@ struct state {
     /* A mouse button that is associated with the current button */
     int mb;
 
-    /* To handle an `ON_MOUSE_LEAVE` event, we need to monitor the mouse cursor movements and detect when it leaves the button. When the mouse cursor enters the button, we set the variable to indicate that the button is ready to initiate an ON_MOUSE_LEAVE callback */
+    /* To handle an `ON_MOUSE_LEAVE` event, we need to monitor the mouse cursor movements and detect when it leaves the button. When the mouse cursor enters the button, we set the variable to indicate that the button is ready to initiate an `ON_MOUSE_LEAVE` callback */
     int is_left;
 
     /* A button callback function that is invoked when the button is clicked */
