@@ -2,6 +2,29 @@
 
 /* ================================================================ */
 
+struct state {
+
+    /* It tells whether a mouse cursor is within the boundaries of the button or not */
+    int is_hover;
+
+    /* A mouse button that is associated with the current button */
+    int mb;
+
+    /* To handle an `ON_MOUSE_LEAVE` event, we need to monitor the mouse cursor movements and detect when it leaves the button. When the mouse cursor enters the button, we set the variable to indicate that the button is ready to initiate an `ON_MOUSE_LEAVE` callback */
+    int is_left;
+
+    /* A button callback function that is invoked when the button is clicked */
+    void (*on_click)(void* args);
+
+    /* A button callback function that is invoked when the mouse cursor enters the button */
+    void (*on_mouse_enter)(void* args);
+
+    /* A button callback function that is invoked when the mouse cursor leaves the button */
+    void (*on_mouse_leave)(void* args);
+};
+
+/* ================================================================ */
+
 Button_t Button_new(int x, int y, int w, int h) {
 
     Button_t button = NULL;
@@ -17,6 +40,10 @@ Button_t Button_new(int x, int y, int w, int h) {
         return button;
     }
 
+    if ((button->state = (struct state*) calloc(1, sizeof(struct state))) == NULL) {
+        Button_destroy(&button);
+    }
+
     button->dimensions = (SDL_Rect) {x, y, w, h};
 
     return button;
@@ -28,19 +55,9 @@ Button_t Button_new_Text(int x, int y, int w, int h, const char* label, TTF_Font
 
     Button_t button = NULL;
 
-    if ((w < 0) || (h < 0)) {
-        
-        /* Set an error code */
+    if ((button = Button_new(x, y, w, h)) == NULL) {
         return button;
     }
-
-    if ((button = (Button_t) calloc(1, sizeof(Button))) == NULL) {
-
-        return button;
-    }
-
-    button->dimensions.x = x;
-    button->dimensions.y = y;
 
     if ((button->label = Text_new(label, font)) == NULL) {
         Button_destroy(&button);
@@ -79,6 +96,8 @@ void Button_destroy(Button_t* button) {
         return ;
     }
 
+    free((void*) (*button)->state);
+
     Text_destroy(&(*button)->label);
 
     Texture_destroy(&(*button)->texture);
@@ -113,19 +132,99 @@ int Button_display(const Button_t b, const Window_t w) {
 
 /* ================================================================ */
 
-void Button_click(const Button_t btn, const SDL_Point* p, void* callback_args) {
+void Button_hover(const Button_t btn, const SDL_Point* p, SDL_MouseButtonEvent mb, void* callback_args) {
 
     if (btn == NULL) {
         return ;
     }
 
-    btn->is_hover = LilEn_is_inside(&btn->dimensions, p);
+    btn->state->is_hover = LilEn_is_inside(&btn->dimensions, p);
 
-    if ((btn->on_click != NULL) && (btn->is_hover)) {
-        btn->on_click(callback_args);
+    if ((btn->state->on_mouse_enter != NULL) && (btn->state->is_hover) && (!btn->state->is_left)) {
+        btn->state->on_mouse_enter(callback_args);
+
+        btn->state->is_left = !btn->state->is_left;
+    }
+
+    if ((btn->state->on_mouse_leave != NULL) && (!btn->state->is_hover) && (btn->state->is_left)) {
+        btn->state->on_mouse_leave(callback_args);
+
+        btn->state->is_left = !btn->state->is_left;
+
+        printf("The function is going\n");
     }
 
     return ;
+}
+
+/* ================================================================ */
+
+int Button_add_callback(const Button_t btn, int event, void (*callback)(void*)) {
+
+    int exit_code = EXIT_SUCCESS;
+
+    if (btn == NULL) {
+        return EXIT_FAILURE;
+    }
+
+    switch (event) {
+        
+        case ON_CLICK:
+
+            btn->state->on_click = callback;
+
+            break ;
+
+        /* ======== */
+
+        case ON_MOUSE_ENTER:
+
+            btn->state->on_mouse_enter = callback;
+
+            break ;
+
+        /* ======== */
+
+        case ON_MOUSE_LEAVE:
+
+            btn->state->on_mouse_leave = callback;
+
+            break ;
+
+        /* ======== */
+
+        default:
+
+            exit_code = EXIT_FAILURE;
+
+            break ;
+    }
+
+    return exit_code;
+}
+
+/* ================================================================ */
+
+void Button_click(const Button_t btn, const SDL_Point* p, SDL_MouseButtonEvent mb, void* callback_args) {
+
+    if ((btn->state->is_hover = LilEn_is_inside(&btn->dimensions, p)) && (mb.button == btn->state->mb)) {
+        btn->state->on_click(callback_args);
+    }
+
+    return ;
+}
+
+/* ================================================================ */
+
+int Button_bind_mb(const Button_t btn, int sdl_mouse_button) {
+    
+    if (btn == NULL) {
+        return EXIT_FAILURE;
+    }
+
+    btn->state->mb = sdl_mouse_button;
+
+    return EXIT_SUCCESS;
 }
 
 /* ================================================================ */
