@@ -3,6 +3,8 @@
 
 #include "../LilEn.h"
 
+#define BUTTON_TEXT_SIZE 16
+
 /* ================================================================ */
 
 struct button {
@@ -13,9 +15,13 @@ struct button {
     /* The text a button contains  */
     Text_t label;
 
+    char text[BUTTON_TEXT_SIZE];
+
     Texture_t texture;
 
     int is_solid;
+
+    int is_border;
 
     /* A pointer to an incomplete data type that stores button information, such as its callbacks. A user can only assign a callback function to the button via defined functions */
     struct state* state;
@@ -68,7 +74,7 @@ extern int Button_display(const Button_t b, const Window_t w);
 /**
  * Handle `ON_MOUSE_ENTER` and `ON_MOUSE_LEAVE` events.
 */
-extern void Button_hover(const Button_t btn, const SDL_Point* p, SDL_MouseButtonEvent mb, void* callback_args);
+extern void Button_hover(const Button_t btn, const SDL_Point* p, void* callback_args);
 
 /* ================================ */
 

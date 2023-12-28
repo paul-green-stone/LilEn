@@ -326,7 +326,7 @@ int LilEn_is_inside(const SDL_Rect* rect, const SDL_Point* point) {
         (point->x > rect->x)
         && (point->x < rect->x + rect->w)
         && (point->y > rect->y)
-        && (point->y < rect->h + rect->h)
+        && (point->y < rect->y + rect->h)
     );
 }
 

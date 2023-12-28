@@ -22,7 +22,7 @@ static void foo(void* args) {
 
     LilEn_set_colorRGB(255, 255, 255, 255);
 
-    Text_update(b->label, "Left", f);
+    Text_update(b->label, b->text, f);
 
     LilEn_set_colorRGB(old.r, old.g, old.b, old.a);
 }
@@ -115,7 +115,8 @@ int main(int argc, char** argv) {
 
                 case SDL_MOUSEMOTION:
 
-                    Button_hover(button, &position, e.button, button);
+                    Button_hover(button, &position, button);
+                    
 
                     break ;
 

@@ -46,6 +46,8 @@ Button_t Button_new(int x, int y, int w, int h) {
 
     button->dimensions = (SDL_Rect) {x, y, w, h};
 
+    printf("%d, %d, %d, %d\n", button->dimensions.x, button->dimensions.y, button->dimensions.w, button->dimensions.h);
+
     return button;
 }
 
@@ -63,22 +65,32 @@ Button_t Button_new_Text(int x, int y, int w, int h, const char* label, TTF_Font
         Button_destroy(&button);
     }
 
+    if ((button->label != NULL)) {
+        strncpy(button->text, label, BUTTON_TEXT_SIZE - 1);
+
+        button->text[strlen(button->text)] = '\0';
+    }
+
+    /* Center the text in the button if its width less than the button's width */
     if (button->label->position.w < w) {
         button->label->position.x = (w / 2 - button->label->position.w / 2) + button->dimensions.x;
 
         button->dimensions.w = w;
     }
+    /* Make the button's width equal to the text's width to fit it inside */
     else if (button->label->position.w >= w) {
         button->label->position.x = button->dimensions.x;
 
         button->dimensions.w = button->label->position.w;
     }
 
+    /* Center the text in the button if its height less than the button's height */
     if (button->label->position.h < h) {
         button->label->position.y = (h / 2 - button->label->position.h / 2) + button->dimensions.y;
 
         button->dimensions.h = h;
     }
+    /* Make the button's height equal to the text's height to fit it inside */
     else if (button->label->position.h >= h) {
         button->label->position.y = button->dimensions.y;
 
@@ -121,18 +133,24 @@ int Button_display(const Button_t b, const Window_t w) {
         return EXIT_FAILURE;
     }
 
+    if (b->is_solid) {
+        LilEn_draw_rect(w, &b->dimensions);
+    }
+
+    if (b->is_border) {
+        LilEn_outline_rect(w, &b->dimensions);
+    }
+
     if (b->label != NULL) {
         Text_display(b->label, w);
     }
-
-    (b->is_solid) ? LilEn_draw_rect(w, &b->dimensions) : LilEn_outline_rect(w, &b->dimensions);
 
     return EXIT_SUCCESS;
 }
 
 /* ================================================================ */
 
-void Button_hover(const Button_t btn, const SDL_Point* p, SDL_MouseButtonEvent mb, void* callback_args) {
+void Button_hover(const Button_t btn, const SDL_Point* p, void* callback_args) {
 
     if (btn == NULL) {
         return ;
@@ -150,8 +168,6 @@ void Button_hover(const Button_t btn, const SDL_Point* p, SDL_MouseButtonEvent m
         btn->state->on_mouse_leave(callback_args);
 
         btn->state->is_left = !btn->state->is_left;
-
-        printf("The function is going\n");
     }
 
     return ;
@@ -228,3 +244,5 @@ int Button_bind_mb(const Button_t btn, int sdl_mouse_button) {
 }
 
 /* ================================================================ */
+
+#undef BUTTON_TEXT_SIZE

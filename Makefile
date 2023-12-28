@@ -73,12 +73,6 @@ $(OBJDIR)/Button.o: $(BUTTON) $(INCLUDE)
 	$(CC) $(ALL_CFLAGS) $(CFLAGS) -o $@ $<
 
 # ================================================================ #
-# Core module 
-$(OBJDIR)/Core.o: $(COREOBJS)
-	$(LD) -r -o $@ $^
-	rm $(COREOBJS)
-
-# ================================================================ #
 # Texture module
 $(OBJDIR)/Texture.o: $(TEXTURE) $(INCLUDE)
 	$(CC) $(ALL_CFLAGS) $(CFLAGS) -o $@ $<
